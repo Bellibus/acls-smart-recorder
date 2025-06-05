@@ -760,5 +760,517 @@ if (logTarget) {
     });
   });
 </script>
+
+<!-- Floating ACLS Adviser Box with Responsive Design -->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Prompt&display=swap');
+  #acls-adviser-box {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 320px;
+    max-height: 140px;
+    overflow-y: auto;
+    background: white;
+    border: 2px solid #004080;
+    border-radius: 10px;
+    padding: 10px;
+    font-family: 'Prompt', sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 9999;
+  }
+  #acls-adviser-box h4 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    color: #004080;
+  }
+  #acls-adviser-log {
+    max-height: 100px;
+    overflow-y: auto;
+  }
+
+  /* Responsive for smaller screens */
+  @media (max-width: 768px) {
+    #acls-adviser-box {
+      width: 90%;
+      right: 5%;
+      bottom: 10px;
+      font-size: 13px;
+    }
+  }
+</style>
+
+<div id="acls-adviser-box">
+  <h4>💬 ACLS Adviser</h4>
+  <div id="acls-adviser-log">
+    <!-- future messages will appear here -->
+  </div>
+</div>
+
+
+<script>
+function postAdviserMessage(msg) {
+    const log = document.getElementById("acls-adviser-log");
+    const p = document.createElement("p");
+    p.innerHTML = msg.replace(/\n/g, "<br>");
+    log.appendChild(p);
+    log.scrollTop = log.scrollHeight;
+}
+
+function formatTime(date) {
+    return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const startBtn = document.getElementById("start-acls");
+    if (startBtn) {
+        startBtn.addEventListener("click", function () {
+            const now = new Date();
+            const future = new Date(now.getTime() + 30 * 60000); // +30 min
+            const nowStr = formatTime(now);
+            const futureStr = formatTime(future);
+
+            const message = `📍 เริ่มต้นการช่วยชีวิตขั้นสูง (ACLS)\nเวลาเริ่มต้น: ${nowStr} น.\nครบ 30 นาทีโดยประมาณ: ${futureStr} น.\n\n🩺 คำแนะนำ\n• กดหน้าอกทันที ลึก 5–6 ซม. ที่ความถี่ 100–120 ครั้ง/นาที\n• เปิดทางเดินหายใจ และช่วยหายใจทุก 6 วินาที (หากใส่ท่อช่วยหายใจแล้ว)\n• ประเมินคลื่นหัวใจทุก 2 นาที และช็อกไฟฟ้าหากพบ VF/pVT\n• ให้ Epinephrine 1 mg ทุก 3–5 นาที\n• พิจารณาและแก้ไขสาเหตุที่เป็นไปได้ (H’s & T’s)`;
+
+            postAdviserMessage(message);
+        });
+    }
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const endBtn = document.getElementById("end-acls");
+    if (endBtn) {
+        endBtn.addEventListener("click", function () {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const message = `🔚 ยุติการช่วยชีวิตขั้นสูง (End ACLS)\nเวลา : ${timeStr} น.\n\n📍 ได้รับคำสั่งยุติการช่วยชีวิตจากแพทย์ หรือญาติผู้ป่วยพิจารณาขอหยุดการช่วยชีวิต  \n📍 การช่วยชีวิตได้ดำเนินการตามแนวทาง ACLS อย่างครบถ้วนแล้ว  \n📍 ผู้ป่วยไม่มีการตอบสนอง หรือยังมีคลื่นหัวใจแบบไม่มีชีพจร (PEA)\n\n🩺 โปรดดำเนินการตามขั้นตอนหลังการยุติการช่วยชีวิต:\n• ประเมินสัญญาณชีพขั้นสุดท้าย\n• แจ้งทีมแพทย์ พยาบาล และครอบครัว\n• บันทึกรายงานการช่วยฟื้นคืนชีพและเวลาการยุติการช่วยชีวิต \n• ดำเนินกระบวนการรายงานการเสียชีวิต`;
+            const log = document.getElementById("acls-adviser-log");
+            if (log) {
+                const p = document.createElement("p");
+                p.innerHTML = message.replace(/\n/g, "<br>");
+                log.appendChild(p);
+                log.scrollTop = log.scrollHeight;
+            }
+        });
+    }
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const roscBtn = document.getElementById("rosc-end-acls");
+    if (roscBtn) {
+        roscBtn.addEventListener("click", function () {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const message = `✅ ผู้ป่วยมี ROSC – เริ่มดูแลภายหลังการฟื้นคืนชีพ\nเวลา : ${timeStr} น.\n\n📌 แนวทางการดูแลเบื้องต้น\n• ประเมินระดับรู้สึกตัว หากไม่รู้สึกตัวรายงานแพทย์พิจารณาทำ TTM\n• ดูแลการหายใจ – ให้ SpO₂ ≥ 94%, PaCO₂ อยู่ในช่วงปกติ\n• ดูแลความดันโลหิต – ให้ SBP ≥ 90 mmHg (พิจารณา IV fluid หรือ vasopressor)\n• ตรวจคลื่นหัวใจ 12 leads \n• เฝ้าระวังภาวะแทรกซ้อน และย้ายเข้าหอผู้ป่วยวิกฤต\n\n🩺 โปรดรายงานแพทย์เพื่อวางแผนการรักษาต่อเนื่อง`;
+            const log = document.getElementById("acls-adviser-log");
+            if (log) {
+                const p = document.createElement("p");
+                p.innerHTML = message.replace(/\n/g, "<br>");
+                log.appendChild(p);
+                log.scrollTop = log.scrollHeight;
+            }
+        });
+    }
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let cprCycle = 1;
+    document.querySelectorAll("button").forEach(button => {
+        if (button.textContent.trim() === "Start CPR") {
+            button.addEventListener("click", function () {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const message = `❤️‍🔥 เริ่มการทำ CPR cycle ที่ ${cprCycle}\nเวลา: ${timeStr} น.\n\n📌 แนวทางการทำ CPR ที่มีประสิทธิภาพ:\n• กดหน้าอกให้ลึก 5–6 ซม. ที่ความถี่ 100–120 ครั้ง/นาที\n• ให้ทีมผลัดเปลี่ยนผู้กดทุก 2 นาที \n• อย่าลืมประเมินคลื่นหัวใจหลังครบแต่ละรอบ CPR\n• หากใส่ท่อช่วยหายใจแล้ว ให้ช่วยหายใจทุก 6 วินาที โดยไม่หยุดกดหน้าอก`;
+                const log = document.getElementById("acls-adviser-log");
+                if (log) {
+                    const p = document.createElement("p");
+                    p.innerHTML = message.replace(/\n/g, "<br>");
+                    log.appendChild(p);
+                    log.scrollTop = log.scrollHeight;
+                }
+                cprCycle++;
+            });
+        }
+    });
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let cprCycle = 1;
+    document.querySelectorAll("button").forEach(button => {
+        if (button.textContent.trim() === "Start CPR") {
+            button.addEventListener("click", function () {
+                const interruptedText = document.body.innerText.match(/Interrupted Time:\s*(\d+)/);
+                let interruptedSeconds = interruptedText ? parseInt(interruptedText[1], 10) : 0;
+
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                const log = document.getElementById("acls-adviser-log");
+
+                // CPR message
+                const cprMessage = `❤️‍🔥 เริ่มการทำ CPR cycle ที่ ${cprCycle}\nเวลา: ${timeStr} น.\n\n📌 แนวทางการทำ CPR ที่มีประสิทธิภาพ:\n• กดหน้าอกให้ลึก 5–6 ซม. ที่ความถี่ 100–120 ครั้ง/นาที\n• ให้ทีมผลัดเปลี่ยนผู้กดทุก 2 นาที \n• อย่าลืมประเมินคลื่นหัวใจหลังครบแต่ละรอบ CPR\n• หากใส่ท่อช่วยหายใจแล้ว ให้ช่วยหายใจทุก 6 วินาที โดยไม่หยุดกดหน้าอก`;
+                const p1 = document.createElement("p");
+                p1.innerHTML = cprMessage.replace(/\n/g, "<br>");
+                log.appendChild(p1);
+
+                // Interruption warning if applicable
+                if (interruptedSeconds > 10) {
+                    const warning = `⚠️ หยุดการกดหน้าอกนานเกินไป (Interrupted Time > 10 วินาที)\n\n📌 คำแนะนำ:\n• ลดช่วงเวลาหยุดการกดหน้าอกให้น้อยที่สุด (≤ 10 วินาที)\n• เตรียมอุปกรณ์หรือประเมินคลื่นหัวใจให้รวดเร็ว\n• เริ่มการกดหน้าอกใหม่ทันทีเมื่อประเมินเสร็จ`;
+                    const p2 = document.createElement("p");
+                    p2.innerHTML = warning.replace(/\n/g, "<br>");
+                    log.appendChild(p2);
+                }
+
+                log.scrollTop = log.scrollHeight;
+                cprCycle++;
+            });
+        }
+    });
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const log = document.getElementById("acls-adviser-log");
+
+    function appendAdviserMessage(message) {
+        if (log) {
+            const p = document.createElement("p");
+            p.innerHTML = message.replace(/\n/g, "<br>");
+            log.appendChild(p);
+            log.scrollTop = log.scrollHeight;
+        }
+    }
+
+    document.querySelectorAll("button").forEach(button => {
+        if (button.textContent.trim() === "Asystole") {
+            button.addEventListener("click", function () {
+                const msg = `📉 Rhythm: Asystole\n❗ ไม่พบคลื่นไฟฟ้าหัวใจและไม่มีชีพจร \n\n📌 แนวทางการช่วยชีวิต\n• เริ่ม CPR ต่อทันที – ไม่ต้องช็อกไฟฟ้า\n• ให้ Epinephrine 1 mg ทุก 3–5 นาที\n• ทบทวน H’s และ T’s เพื่อหาสาเหตุที่แก้ไขได้`;
+                appendAdviserMessage(msg);
+            });
+        }
+        if (button.textContent.trim() === "PEA") {
+            button.addEventListener("click", function () {
+                const msg = `⚡ Rhythm: PEA (Pulseless Electrical Activity)\n❗ พบคลื่นไฟฟ้าหัวใจแต่ไม่มีชีพจร – ไม่มีการบีบตัวของหัวใจแม้มีสัญญาณไฟฟ้า\n\n📌 แนวทางการช่วยชีวิต\n• เริ่ม CPR ต่อทันที – ไม่ต้องช็อกไฟฟ้า\n• ให้ Epinephrine 1 mg ทุก 3–5 นาที\n• ทบทวน H’s และ T’s เพื่อหาสาเหตุที่แก้ไขได้`;
+                appendAdviserMessage(msg);
+            });
+        }
+    });
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const log = document.getElementById("acls-adviser-log");
+
+    function appendAdviserMessage(message) {
+        if (!log) return;
+        const p = document.createElement("p");
+        p.innerHTML = message.replace(/\n/g, "<br>");
+        log.appendChild(p);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    const rhythmButtons = document.querySelectorAll("button");
+    rhythmButtons.forEach(button => {
+        const text = button.textContent.trim();
+        if (text === "VF") {
+            button.addEventListener("click", function () {
+                const msg = `⚡ Rhythm: VF (Ventricular Fibrillation)\n❗ หัวใจห้องล่างเต้นผิดจังหวะ – ไม่มีชีพจร\n\n📌 แนวทางการช่วยชีวิต\n• เริ่ม CPR ทันที พร้อมเตรียมช็อกไฟฟ้า\n• ให้ Defibrillation เร็วที่สุด แล้วทำ CPR ต่อทันที\n• ให้ Epinephrine 1 mg ทุก 3–5 นาที (หลังช็อกครั้งที่ 2)\n• พิจารณาให้ Amiodarone หลังช็อกครั้งที่ 3`;
+                appendAdviserMessage(msg);
+            });
+        } else if (text === "pVT") {
+            button.addEventListener("click", function () {
+                const msg = `⚡ Rhythm: Pulseless VT (pVT)\n❗ หัวใจเต้นเร็วผิดปกติแบบกว้าง – ไม่มีชีพจร\n\n📌 แนวทางการช่วยชีวิต\n• เริ่ม CPR ทันที พร้อมเตรียมช็อกไฟฟ้า\n• ให้ Defibrillation เร็วที่สุด แล้วทำ CPR ต่อทันที\n• ให้ Epinephrine 1 mg ทุก 3–5 นาที (หลังช็อกครั้งที่ 2)\n• พิจารณาให้ Amiodarone หลังช็อกครั้งที่ 3`;
+                appendAdviserMessage(msg);
+            });
+        }
+    });
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const btnAdrenaline = document.getElementById("btn-adrenaline");
+    const log = document.getElementById("acls-adviser-log");
+
+    function appendAdviserMessage(message) {
+        if (!log) return;
+        const p = document.createElement("p");
+        p.innerHTML = message.replace(/\n/g, "<br>");
+        log.appendChild(p);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    if (btnAdrenaline) {
+        btnAdrenaline.addEventListener("click", function () {
+            const msg = `💉 Epinephrine 1 mg (Adrenaline)\n\n📌 วิธีผสม: ใช้ขนาด 1 mg/1 mL (1:1,000)\n→ เจือจางด้วย NSS ให้ได้ 10 mL รวม (1:10,000)\n\n📌 วิธีให้ยา:\n• ฉีดเข้าหลอดเลือดดำ (IV/IO) \n• ตามด้วย NSS 10–20 mL`;
+            appendAdviserMessage(msg);
+        });
+    }
+});
+</script>
+
+
+<style>
+#clear-adviser-btn {
+  position: fixed;
+  bottom: 180px;
+  right: 20px;
+  padding: 6px 12px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 14px;
+  background-color: #e11d48;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  cursor: pointer;
+  z-index: 9999;
+}
+</style>
+
+<button id="clear-adviser-btn">🧹 ล้างข้อความ</button>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const clearBtn = document.getElementById("clear-adviser-btn");
+    const log = document.getElementById("acls-adviser-log");
+    clearBtn.addEventListener("click", function () {
+        if (log) {
+            log.innerHTML = "";
+        }
+    });
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const log = document.getElementById("acls-adviser-log");
+
+    function appendAdviserMessage(message) {
+        if (!log) return;
+        const p = document.createElement("p");
+        p.innerHTML = message.replace(/\n/g, "<br>");
+        log.appendChild(p);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    const buttons = document.querySelectorAll("button");
+    buttons.forEach(button => {
+        const text = button.textContent.trim();
+        if (text === "Amiodarone 150 mg") {
+            button.addEventListener("click", function () {
+                const msg = `💊 Amiodarone 150 mg\n📌 ข้อบ่งใช้:\n• ให้เพิ่มเติมหลัง Amiodarone 300 mg ใน VF/pVT\n• หรือใน VT ที่มีชีพจรแต่ Unstable (แบบ synchronized cardioversion)\n\nวิธีผสม:\n• ใช้ Amiodarone 150 mg/3 mL 1 หลอด\n• เจือจางใน D5W 100 mL\n\nวิธีให้ยา:\n• ให้แบบ slow IV infusion ภายใน 10 นาที\n• ห้ามฉีดเร็วในผู้มีชีพจร`;
+                appendAdviserMessage(msg);
+            });
+        } else if (text === "Amiodarone 300 mg") {
+            button.addEventListener("click", function () {
+                const msg = `💊 Amiodarone 300 mg\n📌 ข้อบ่งใช้: VF / pVT ที่ไม่ตอบสนองต่อการช็อก 2–3 ครั้ง\n\nวิธีผสม:\n• ใช้ Amiodarone 150 mg/3 mL × 2 หลอด\n• เจือจางใน D5W ให้ครบ 20–30 mL\n\nวิธีให้ยา:\n• ฉีดเข้าหลอดเลือดดำ (IV/IO) แบบ bolus\n• ให้หลังช็อกครั้งที่ 3\n• ตามด้วย NSS 10–20 mL และ CPR ต่อทันที`;
+                appendAdviserMessage(msg);
+            });
+        }
+    });
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const log = document.getElementById("acls-adviser-log");
+
+    function appendAdviserMessage(message) {
+        if (!log) return;
+        const p = document.createElement("p");
+        p.innerHTML = message.replace(/\n/g, "<br>");
+        log.appendChild(p);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    const buttons = document.querySelectorAll("button");
+    buttons.forEach(button => {
+        const text = button.textContent.trim();
+        if (text === "Lidocaine 1 mg/kg") {
+            button.addEventListener("click", function () {
+                const msg = `💉 Lidocaine 1 mg/kg IV/IO\n📌 ใช้ใน VF/pVT ที่ไม่ตอบสนองต่อการช็อกไฟฟ้า\n• ฉีดเข้า IV หรือ IO แบบ bolus\n• หากจำเป็น ให้เพิ่ม 0.5–0.75 mg/kg ทุก 5–10 นาที\n• ขนาดรวมไม่เกิน 3 mg/kg\n• ใช้แทน Amiodarone หากไม่มีหรือแพ้ยา`;
+                appendAdviserMessage(msg);
+            });
+        } else if (text === "Lidocaine 0.5 mg/kg") {
+            button.addEventListener("click", function () {
+                const msg = `💉 Lidocaine 0.5 mg/kg IV/IO\n📌 ขนาดเพิ่มเติม หลังให้ครั้งแรก\n• ฉีด bolus ทุก 5–10 นาที ตามความจำเป็น\n• รวมไม่เกิน 3 mg/kg\n• ใช้แทน Amiodarone ได้ใน VF/pVT`;
+                appendAdviserMessage(msg);
+            });
+        }
+    });
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const log = document.getElementById("acls-adviser-log");
+
+    function appendAdviserMessage(message) {
+        if (!log) return;
+        const p = document.createElement("p");
+        p.innerHTML = message.replace(/\n/g, "<br>");
+        log.appendChild(p);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    const buttons = document.querySelectorAll("button");
+    buttons.forEach(button => {
+        const text = button.textContent.trim();
+        if (text === "NaHCO₃ 50 mL") {
+            button.addEventListener("click", function () {
+                const msg = `💉 Sodium Bicarbonate 50 mL (7.5%NaHCO₃)\n📌 ข้อบ่งใช้:\n• ภาวะเลือดเป็นกรดรุนแรง (severe metabolic acidosis)\n• Hyperkalemia ที่มีผลต่อคลื่นหัวใจ\n• ภาวะยาเกินบางชนิด เช่น TCA overdose\n• ระยะ CPR นาน > 10–20 นาที อาจพิจารณาเป็นกรณี ๆ\n\n📌 วิธีให้ยา:\n• IV push 50 mL ช้า ๆ \n• ห้ามผสมร่วมกับ Calcium \n• เฝ้าระวัง pH > 7.55 และ Na⁺ สูง`;
+                appendAdviserMessage(msg);
+            });
+        } else if (text === "Calcium Gluconate 10 mL") {
+            button.addEventListener("click", function () {
+                const msg = `💉 Calcium Gluconate 10 mL (10%)\n📌 ข้อบ่งใช้:\n• Hyperkalemia (โดยเฉพาะมีคลื่นหัวใจผิดปกติ)\n• Hypocalcemia ที่มีอาการ\n• Calcium channel blocker overdose\n\n📌 วิธีให้ยา:\n• ให้ IV ช้า ๆ ภายใน 2–5 นาที\n• ไม่ควรให้พร้อมกับ NaHCO₃ → ให้แยกสายหรือ flush ระหว่างยา\n\n📌 ข้อควรระวัง:\n• หลีกเลี่ยง extravasation → อาจทำให้เนื้อตายเฉพาะที่\n• เฝ้าระวัง Bradycardia และ Arrhythmia`;
+                appendAdviserMessage(msg);
+            });
+        }
+    });
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const log = document.getElementById("acls-adviser-log");
+
+    function appendAdviserMessage(message) {
+        if (!log) return;
+        const p = document.createElement("p");
+        p.innerHTML = message.replace(/\n/g, "<br>");
+        log.appendChild(p);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    const buttons = document.querySelectorAll("button");
+    buttons.forEach(button => {
+        const text = button.textContent.trim();
+        if (text === "Atropine 1 mg") {
+            button.addEventListener("click", function () {
+                const msg = `💉 Atropine 1 mg IV\n📌 ข้อบ่งใช้: Bradycardia ที่มีอาการ (hypotension, altered mental status, chest pain ฯลฯ)\n• ขนาด: 1 mg IV push\n• ให้ซ้ำได้ทุก 3–5 นาที\n• ขนาดรวมไม่เกิน 3 mg\n\n⚠️ ใช้ด้วยความระวังในผู้ป่วยกล้ามเนื้อหัวใจตาย (AMI)\nหากไม่ตอบสนอง ให้เตรียม Pacing หรือให้ Dopamine/Epinephrine แทน`;
+                appendAdviserMessage(msg);
+            });
+        } else if (text === "Adenosine 6 mg") {
+            button.addEventListener("click", function () {
+                const msg = `💉 Adenosine 6 mg IV Push\n📌 ข้อบ่งใช้: SVT with narrow QRS (regular, monomorphic)\n• ฉีด IV push เร็วภายใน 1–2 วินาที ตามด้วย NSS 20 mL flush Double Syringe Technique\n• ผู้ป่วยควรอยู่ในท่านอน พร้อมเฝ้าระวัง ECG อย่างใกล้ชิด\n• หากไม่มีผล ให้เพิ่มเป็น 12 mg\n\n⚠️ ห้ามใช้ใน Irregular wide QRS (เช่น AFib + WPW)`;
+                appendAdviserMessage(msg);
+            });
+        } else if (text === "Adenosine 12 mg") {
+            button.addEventListener("click", function () {
+                const msg = `💉 Adenosine 12 mg IV Push\n📌 ข้อบ่งใช้: ให้เมื่อขนาด 6 mg ไม่ได้ผล (ใน SVT)\n• ฉีด IV push ภายใน 1–2 วินาที ตามด้วย NSS flush Double Syringe Technique\n• ให้ได้สูงสุด 2 ครั้ง (12 mg × 2) หากยังไม่ตอบสนอง\n\n⚠️ อาการข้างเคียงที่พบได้: flushing, chest discomfort, transient asystole`;
+                appendAdviserMessage(msg);
+            });
+        }
+    });
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const log = document.getElementById("acls-adviser-log");
+
+    function appendAdviserMessage(message) {
+        if (!log) return;
+        const p = document.createElement("p");
+        p.innerHTML = message.replace(/\n/g, "<br>");
+        log.appendChild(p);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    document.querySelectorAll("button").forEach(button => {
+        const text = button.textContent.trim();
+        if (text === "50%Glucose 50 mL") {
+            button.addEventListener("click", function () {
+                const msg = `💉 50% Glucose 50 mL (Dextrose 50%)\n📌 ข้อบ่งใช้:\n• ภาวะน้ำตาลในเลือดต่ำ (Hypoglycemia)\n• ผู้ป่วยไม่รู้สึกตัวและสงสัย Hypoglycemia ขณะ CPR\n\n📌 วิธีให้ยา:\n• IV push ช้า ๆ ขนาด 50 mL\n• ตรวจระดับน้ำตาลปลายนิ้ว หรือส่งตรวจ DTX ทันทีที่ให้ได้`;
+                appendAdviserMessage(msg);
+            });
+        } else if (text === "Magnesium Sulfate 2 g") {
+            button.addEventListener("click", function () {
+                const msg = `💉 Magnesium Sulfate 2 g IV\n📌 ข้อบ่งใช้:\n• Torsades de Pointes (polymorphic VT with long QT)\n• Hypomagnesemia\n• VF/pVT ที่สงสัยมีภาวะขาดแมกนีเซียมร่วม\n• Preeclampsia/eclampsia (กรณีพิเศษในหญิงตั้งครรภ์)\n\n📌 วิธีให้ยา:\n• ผสมใน NSS/D5W ปริมาตร 10–20 mL\n• ฉีด IV ช้า ๆ ภายใน 5–10 นาที\n• ใน Torsades ระหว่าง CPR → ให้ bolus ได้เร็วขึ้น`;
+                appendAdviserMessage(msg);
+            });
+        }
+    });
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let defibCount = 0;
+    const log = document.getElementById("acls-adviser-log");
+
+    function appendAdviserMessage(message) {
+        if (!log) return;
+        const p = document.createElement("p");
+        p.innerHTML = message.replace(/\n/g, "<br>");
+        log.appendChild(p);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    document.querySelectorAll("button").forEach(button => {
+        const text = button.textContent.trim();
+        if (["Defib 120 J", "Defib 150 J", "Defib 200 J"].includes(text)) {
+            button.addEventListener("click", function () {
+                defibCount += 1;
+                const msg = `⚡ Defibrillation ครั้งที่ ${defibCount}\n📌 ข้อบ่งใช้: VF / pVT\n• ให้ช็อกเร็วที่สุดโดยไม่ต้องรอครบรอบ CPR\n• เริ่ม CPR ทันทีหลังช็อก – ห้ามรอประเมิน\n\n📌 ขั้นตอน:\n• ชาร์จพลังงานตามค่าที่กำหนด\n• ตรวจสอบความปลอดภัย “Clear” ทุกครั้ง\n• หลังช็อก ให้ทำ CPR ต่อทันทีอีก 2 นาที ก่อนประเมินจังหวะหัวใจ`;
+                appendAdviserMessage(msg);
+            });
+        }
+    });
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const log = document.getElementById("acls-adviser-log");
+
+    function appendAdviserMessage(message) {
+        if (!log) return;
+        const p = document.createElement("p");
+        p.innerHTML = message.replace(/\n/g, "<br>");
+        log.appendChild(p);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    document.querySelectorAll("button").forEach(button => {
+        const text = button.textContent.trim();
+        if (text === "ETT") {
+            button.addEventListener("click", function () {
+                const msg = `🫁 ใส่ท่อช่วยหายใจ (ETT) – ตรวจสอบตำแหน่งท่อ\n📌 การประเมินว่าท่อเข้าหลอดลมถูกต้องหรือไม่:\n• ตรวจดูการยกขึ้นของทรวงอกทั้งสองข้าง\n• ฟังเสียงลมเข้าออกที่ปอดทั้ง 2 ข้าง และบริเวณกระเพาะอาหาร\n• ใช้ Capnography (ETCO₂ monitor) – หากมีคลื่น CO₂ ต่อเนื่อง แสดงว่าท่อเข้าหลอดลม\n• ใช้ หลอดตรวจ CO₂ (Colorimetric device) → เปลี่ยนสีแสดงว่ามีการแลกเปลี่ยนก๊าซ\n• ยึดท่อให้แน่น และจดบันทึกตำแหน่งท่อ`;
+                appendAdviserMessage(msg);
+            });
+        }
+    });
+});
+</script>
+
 </body>
 </html>
